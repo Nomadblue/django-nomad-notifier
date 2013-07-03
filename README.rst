@@ -16,5 +16,5 @@ By itself, this plugin cannot be used. You must tipically subclass its
 Read the latest documentation on `Read the docs`_ for installation,
 configuration and customization instructions.
 
-.. _`Read the docs`: http://readthedocs.org/docs/django-nomadlytics/en/latest/
+.. _`Read the docs`: http://readthedocs.org/docs/django-nomad-notifier/en/latest/
 

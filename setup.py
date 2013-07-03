@@ -1,7 +1,7 @@
 import os
 from distutils.core import setup
 
-package_dirs = ('nomadlytics',)
+package_dirs = ('notifier',)
 
 def fullsplit(path, result=None):
     """
@@ -30,17 +30,17 @@ for package_dir in package_dirs:
             data_files.append([dirpath, [os.path.join(dirpath, f) for f in filenames]])
 
 doc_dir = os.path.join(os.path.dirname(__file__), 'docs')
-version_num = __import__('nomadlytics').__version__
+version_num = __import__('notifier').__version__
 
 setup(
-    name='django-nomadlytics',
+    name='django-nomad-notifier',
     version=version_num,
-    description='Django app to track stats to any analytics SaaS using libsaas and celery.',
+    description='Django app to implement a system of notifications for the users of web apps that tipically must receive updates from the site activity.',
     long_description=open('README.rst').read(),
     author='Hector Garcia',
     author_email='hector@nomadblue.com',
-    url='https://github.com/Nomadblue/django-nomadlytics',
-    download_url="https://github.com/Nomadblue/django-nomadlytics/zipball/v%s" % version_num,
+    url='https://github.com/Nomadblue/django-nomad-notifier',
+    download_url="https://github.com/Nomadblue/django-nomad-notifier/archive/v%s.zip" % version_num,
     packages=packages,
     data_files=data_files,
     classifiers=[

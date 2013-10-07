@@ -12,7 +12,7 @@ from notifier.models import Notification
 
 class NotificationsListView(ListView):
     """Shows the list of user notifications in reverse chronological order"""
-    template_name = 'notifications/notifications_list.html'
+    template_name = 'notifier/notifications_list.html'
     model = Notification
 
     def get_queryset(self):

@@ -5,10 +5,14 @@ Django Nomad Notifier
 Overview
 ========
 
-This Django app provides a way to implement a system of notifications for
-the users of web apps that tipically must receive updates from the site activity
-through channels such as emails (they call them "transactional emails" nowadays)
-and displayed/listed on UI ("ala" social apps such as Facebook or Google+).
+This Django app provides a way to implement a **notification system** for
+the users of web apps that must receive updates from the site activity
+through the following channels:
+
+* **Email notifications**: they call them *transactional emails* nowadays.
+  Messages like "Hi Frankie, Jimbo is now following you on SomeSocialFoo.com".
+* **Web notifications**: displayed/listed on UI ("ala" social apps such as
+  Facebook or Google+). A list of notifications that can be marked as read.
 
 Contents:
 

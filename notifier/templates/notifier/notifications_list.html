@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load notifier_tags %}
+
+{% block content %}
+
+<h1>Notifications</h1>
+{% get_new_notifications_count user as new_notifications_count %}
+{% if new_notifications_count %}
+<p>{{ new_notifications_count }} new notifications <small>(<a href="{% url 'clear_all_notifications' %}">Mark all as read</a>)</small></p>   
+{% else %}
+<p>No new notifications</p>   
+{% endif %}
+
+{% for noti in notification_list %}
+  {% with noti_obj=noti.get_notification_obj %}
+    {% include noti_obj.web_noti_tmpl with noti_instance=noti_obj %}
+  {% endwith %}
+{% empty %}
+<strong>No notifications to list</strong>
+{% endfor %}
+
+{% endblock %}
+

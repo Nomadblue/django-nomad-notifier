@@ -3,4 +3,5 @@
 .DS_Store
 dist
 _build
+build/
 MANIFEST

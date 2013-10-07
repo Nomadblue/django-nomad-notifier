@@ -1,9 +1,11 @@
 from django.db import models
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
+from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.contrib.sites.models import Site
+
+from model_utils.managers import InheritanceManager
 
 
 class Notification(models.Model):
@@ -13,14 +15,10 @@ class Notification(models.Model):
     email_sent = models.BooleanField(default=False)
     delivery_response = models.TextField(blank=True)
 
+    objects = InheritanceManager()
+
     def get_notification_obj(self):
-        """Returns the right instance inheriting Notification"""
-        for attr_name in settings.NOTI_CLASS_ATTRS:
-            try:
-                return getattr(self, attr_name)
-            except ObjectDoesNotExist:
-                continue
-        return None
+        return Notification.objects.get_subclass(id=self.id)
 
 
 class NotificationMixin(object):

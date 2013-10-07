@@ -2,6 +2,11 @@
 Installation
 ============
 
+Dependencies
+============
+
+* django-model-utils: https://github.com/carljm/django-model-utils/
+
 Initial setup
 =============
 
@@ -30,6 +35,8 @@ This app uses `South`_ migrations to nicely update your database with the
 ``Notification`` model schema::
 
     python manage.py migrate notifier
+
+.. _`South`: http://south.aeracode.org/
 
 Otherwise you can go on yourself and sync with Django command::
 

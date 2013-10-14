@@ -3,4 +3,6 @@ include LICENSE
 include CHANGELOG
 include MANIFEST.in
 recursive-include docs *
+recursive-include notifier/static *
+recursive-include notifier/templates *
 

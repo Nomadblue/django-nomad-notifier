@@ -27,9 +27,9 @@ for package_dir in package_dirs:
         if '__init__.py' in filenames:
             packages.append('.'.join(fullsplit(dirpath)))
         elif filenames:
+            # not currently used
             data_files.append([dirpath, [os.path.join(dirpath, f) for f in filenames]])
 
-doc_dir = os.path.join(os.path.dirname(__file__), 'docs')
 version_num = __import__('notifier').__version__
 
 setup(
@@ -42,7 +42,7 @@ setup(
     url='https://github.com/Nomadblue/django-nomad-notifier',
     download_url="https://github.com/Nomadblue/django-nomad-notifier/archive/v%s.zip" % version_num,
     packages=packages,
-    data_files=data_files,
+    package_data={'notifier': ['templates/notifier/*']},  # Include templates and statics here
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',

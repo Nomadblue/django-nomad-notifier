@@ -2,8 +2,24 @@
 CHANGELOG
 =========
 
+Version 1.0.1
+=============
+
+* Fix package to make setup.py install templates
+
+Version 1.0.0
+=============
+
+* Complete basic documentation
+* Use django-model-utils
+
+Version 0.2
+===========
+
+* Add urls, views and templates
+
 Version 0.1
 ===========
 
-* First release of package.
+* First release of package
 

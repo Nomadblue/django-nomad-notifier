@@ -50,4 +50,3 @@ class ClearNotificationView(View, SingleObjectMixin):
         except AttributeError:
             pass
         return redirect(self.url)
-

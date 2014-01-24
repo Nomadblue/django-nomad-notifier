@@ -3,7 +3,6 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
-from django.contrib.sites.models import Site
 
 from model_utils.managers import InheritanceManager
 
@@ -32,8 +31,7 @@ class NotificationMixin(object):
 
     def _render_tmpl(self, template):
         ctxt = self.get_context()
-        site = Site.objects.get(id=settings.SITE_ID)
-        ctxt['site'] = "http://%s" % site.domain
+        ctxt['site'] = settings.SITE_URL
         return render_to_string(template, ctxt)
 
     def get_context(self):
@@ -43,9 +41,8 @@ class NotificationMixin(object):
         template = getattr(self, attr_name, None)
         if template is None:
             raise ImproperlyConfigured(u"%(cls)s is missing a "
-                u"template. Define %(cls)s.%(attr)s, or override "
-                u"%(cls)s.%(method_name)s()." % {'attr': attr_name, "cls": self.__class__.__name__, 'method_name': method_name,
-            })
+                                       u"template. Define %(cls)s.%(attr)s, or override "
+                                       u"%(cls)s.%(method_name)s()." % {'attr': attr_name, "cls": self.__class__.__name__, 'method_name': method_name})
         return self._render_tmpl(template)
 
     def get_email_subject(self):
@@ -85,4 +82,3 @@ class NotificationMixin(object):
             msg.send()
             self.email_sent = True
             self.save()
-

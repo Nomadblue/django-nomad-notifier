@@ -43,6 +43,9 @@ setup(
     download_url="https://github.com/Nomadblue/django-nomad-notifier/archive/v%s.zip" % version_num,
     packages=packages,
     package_data={'notifier': ['templates/notifier/*']},  # Include templates and statics here
+    install_requires = [
+        'django-model-utils',
+        ]
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',

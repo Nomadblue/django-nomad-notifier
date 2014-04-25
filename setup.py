@@ -3,6 +3,7 @@ from distutils.core import setup
 
 package_dirs = ('notifier',)
 
+
 def fullsplit(path, result=None):
     """
     Split a pathname into components (the opposite of os.path.join) in a
@@ -23,7 +24,8 @@ for package_dir in package_dirs:
     for dirpath, dirnames, filenames in os.walk(package_dir):
         # Ignore dirnames that start with '.'
         for i, dirname in enumerate(dirnames):
-            if dirname.startswith('.'): del dirnames[i]
+            if dirname.startswith('.'):
+                del dirnames[i]
         if '__init__.py' in filenames:
             packages.append('.'.join(fullsplit(dirpath)))
         elif filenames:
@@ -43,9 +45,7 @@ setup(
     download_url="https://github.com/Nomadblue/django-nomad-notifier/archive/v%s.zip" % version_num,
     packages=packages,
     package_data={'notifier': ['templates/notifier/*']},  # Include templates and statics here
-    install_requires = [
-        'django-model-utils',
-        ]
+    install_requires=['django-model-utils'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
@@ -61,4 +61,3 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ]
 )
-

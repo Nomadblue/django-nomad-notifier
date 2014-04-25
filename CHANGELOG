@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+Version 1.1.1
+=============
+
+* Fixed migrations, add django-model-utils dependency
+
 Version 1.1.0
 =============
 

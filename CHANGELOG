@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+Version 1.2.0
+=============
+
+* Made Notification.user nullable, so we can create non user-attached notifications.
+
 Version 1.1.1
 =============
 

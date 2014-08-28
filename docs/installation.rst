@@ -31,14 +31,29 @@ Add ``notifier`` to the ``INSTALLED_APPS`` setting of your ``settings.py``::
         'notifier',
     )
 
-This app uses `South`_ migrations to nicely update your database with the
-``Notification`` model schema::
+We use `South`_ migrations to nicely update our database with the
+``Notification`` model schema. But **wait**! Since there are models that
+depend on custom user (``settings.AUTH_USER_MODEL``), we cannot provide the
+migrations with the package. Instead, our policy at Nomadblue is to create
+them out of the scope in another place. For example, in an app called
+``website`` it would be::
 
+    SOUTH_MIGRATION_MODULES = {
+        'notifier': 'website.notifier_migrations',
+    }
+
+From your project root, create the initial migration and apply it::
+
+    python manage.py schemamigration notifier --initial
     python manage.py migrate notifier
 
 .. _`South`: http://south.aeracode.org/
 
-Otherwise you can go on yourself and sync with Django command::
+If you prefer not to use migrations, can sync with the Django command::
 
     python manage.py syncdb
 
+Finally, if you want to enable email notifications (disabled by default),
+you **must** set the following in your ``settings.py``::
+
+    SEND_EMAIL_NOTIFICATIONS=True

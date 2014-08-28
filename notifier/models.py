@@ -8,7 +8,7 @@ from model_utils.managers import InheritanceManager
 
 
 class Notification(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='notifications')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='notifications')
     creation_dt = models.DateTimeField(auto_now_add=True)
     displayed = models.BooleanField(default=False)
     email_sent = models.BooleanField(default=False)

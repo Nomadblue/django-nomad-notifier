@@ -22,4 +22,4 @@ Contents:
 
    installation
    usage
-
+   settings

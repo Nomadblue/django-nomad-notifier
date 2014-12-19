@@ -16,7 +16,7 @@ class NotificationsListView(ListView):
     model = Notification
 
     def get_queryset(self):
-        return self.request.user.notifications.order_by('-creation_dt')
+        return self.request.user.notifications.exclude(noti_type=Notification.EMAIL_NOTI).order_by('-creation_dt')
 
 
 class ClearAllNotificationsView(View):

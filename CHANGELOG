@@ -2,10 +2,17 @@
 CHANGELOG
 =========
 
+Version 1.3.0
+=============
+
+* Added notification type field to be able to have web only,
+  email only or web & email notifications.
+
 Version 1.2.0
 =============
 
-* Made Notification.user nullable, so we can create non user-attached notifications.
+* Made Notification.user nullable, so we can create
+  non user-attached notifications.
 
 Version 1.1.1
 =============

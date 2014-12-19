@@ -23,7 +23,8 @@ You must do three things to successfully create a new type of notification:
 
 For this documentation we are going to create a simple **welcome message**
 notification that will be attached to a Django ``User`` model whenever a
-new user is created (i.e. a user signs up).
+new user is created (i.e. a user signs up). It will be a notification that
+will be sent via email and also displayed on a web notifications list.
 
 Subclassing ``models.Notification``
 ===================================
@@ -31,12 +32,25 @@ Subclassing ``models.Notification``
 First of all, the code for the impatient::
 
     class WelcomeNotification(Notification, OurNotificationMixin, NotificationMixin):
-        web_noti_tmpl = 'notifications/web/welcome_notification.html'
+        """Welcomes the user after signup"""
+
+        # This is the model instance that the notification will reference to. In this
+        # particular case, it has to be the user model who just signed up.
+        obj = models.OneToOneField(settings.AUTH_USER_MODEL)
+
+        # Template for web notification list
+        web_noti_tmpl = 'notifications/includes/welcome_notification_list_item.html'
+
+        # Templates for email notification
         email_subject_tmpl = 'notifications/email/welcome_noti_subject.txt'
         email_plaintext_body_tmpl = 'notifications/email/welcome_noti_plaintext_body.txt'
         email_html_body_tmpl = 'notifications/email/welcome_noti_html_body.html'
 
         def get_obj_url(self):
+            """
+            This method is used to specify URL to redirect user after
+            notification is been cleared (a.k.a 'mark as read')
+            """
             return self.obj.get_absolute_url()
 
 As you can see, we must provide the template paths for the two notification
@@ -51,6 +65,7 @@ some other **mandatory** methods we must implement if we want to send
 notifications via email::
 
     class OurNotificationMixin(object):
+        from_email = settings.DEFAULT_FROM_EMAIL
 
         def get_email_headers(self):
             # Replace 'Your name' with your real name or project name
@@ -117,3 +132,17 @@ Assuming that you have already created your template (its path stored in
 you should see a list of notifications. Of course you can go ahead and
 override the ``notifier/notifications_list.html`` template.
 
+Types of notifications
+======================
+
+In our previous example we created a web and email notification, i.e.
+a notification that is sent via email and displayed on you website. But perhaps
+you want to send an email but not show the notification via web. No problem!
+The ``Notification`` object supports specification of types of notifications
+with its ``noti_type`` field. Adjusting the creation of the notification above,
+we would end up with::
+
+    try:
+        user.welcomenotification  # In case user is re-visiting the view by mistake
+    except WelcomeNotification.DoesNotExist:
+        WelcomeNotification.objects.create(user=user, obj=user, noti_type=WelcomeNotification.EMAIL_NOTI)

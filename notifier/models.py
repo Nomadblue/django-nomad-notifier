@@ -8,7 +8,16 @@ from model_utils.managers import InheritanceManager
 
 
 class Notification(models.Model):
+    ALL_TYPE_NOTI = 1
+    WEB_NOTI = 2
+    EMAIL_NOTI = 3
+    NOTIFICATION_TYPE_CHOICES = (
+        (ALL_TYPE_NOTI, 'Full notification'),
+        (WEB_NOTI, 'Web only notification'),
+        (EMAIL_NOTI, 'Email only notification'),
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='notifications')
+    noti_type = models.PositiveSmallIntegerField(choices=NOTIFICATION_TYPE_CHOICES, default=ALL_TYPE_NOTI)
     creation_dt = models.DateTimeField(auto_now_add=True)
     displayed = models.BooleanField(default=False)
     email_sent = models.BooleanField(default=False)

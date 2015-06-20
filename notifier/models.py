@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
+from django.utils import translation
 
 from model_utils.managers import InheritanceManager
 
@@ -41,10 +42,16 @@ class NotificationMixin(object):
     def _render_tmpl(self, template):
         ctxt = self.get_context()
         ctxt['site'] = settings.SITE_URL
+        if self.get_language() is not None:
+            translation.activate(self.get_language())
         return render_to_string(template, ctxt)
 
     def get_context(self):
         return {}
+
+    def get_language(self):
+        """If implemented, is used in `_render_tmpl` to translate tmpl"""
+        return None
 
     def _get_email_field(self, attr_name, method_name):
         template = getattr(self, attr_name, None)

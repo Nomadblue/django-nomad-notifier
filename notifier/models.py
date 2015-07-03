@@ -48,8 +48,7 @@ class Notification(models.Model):
         >>> model.get_auto_web_noti_tmpl()
 
         """
-        suffix = cls.web_noti_tmpl_suffix
-        template = '%s/includes/%s%s' % (cls._meta.app_label, cls.model_tmpl_part, getattr(cls, suffix, ''))
+        template = '%s/templates/%s/includes/%s%s' % (cls._meta.app_label, cls._meta.app_label, cls.model_tmpl_part, cls.web_noti_tmpl_suffix)
         return template
 
 
@@ -99,7 +98,7 @@ class NotificationMixin(object):
 
         """
         suffix = '%s_suffix' % attr_name
-        template = '%s/includes/%s%s' % (cls._meta.app_label, cls.model_tmpl_part, getattr(cls, suffix, ''))
+        template = '%s/templates/%s/includes/%s%s' % (cls._meta.app_label, cls._meta.app_label, cls.model_tmpl_part, getattr(cls, suffix, ''))
         return template
 
     def _get_email_field(self, attr_name, method_name):

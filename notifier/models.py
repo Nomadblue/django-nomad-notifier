@@ -10,14 +10,16 @@ from model_utils.managers import InheritanceManager
 
 
 class Notification(models.Model):
+
     ALL_TYPE_NOTI = 1
-    WEB_NOTI = 2
+    WEB_NOTI = 2  # Filter by WEB_NOTI to display web notifications list
     EMAIL_NOTI = 3
     NOTIFICATION_TYPE_CHOICES = (
         (ALL_TYPE_NOTI, 'Full notification'),
         (WEB_NOTI, 'Web only notification'),
         (EMAIL_NOTI, 'Email only notification'),
     )
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='notifications')
     noti_type = models.PositiveSmallIntegerField(choices=NOTIFICATION_TYPE_CHOICES, default=ALL_TYPE_NOTI)
     creation_dt = models.DateTimeField(auto_now_add=True)
@@ -29,13 +31,17 @@ class Notification(models.Model):
 
     web_noti_tmpl_suffix = '_web_noti_item.html'
 
+    def save(self, *args, **kwargs):
+        if getattr(self, 'notification_type', None):
+            self.noti_type = self.notification_type
+        return super(Notification, self).save(*args, **kwargs)
+
     def get_notification_obj(self):
         return Notification.objects.get_subclass(id=self.id)
 
     @property
     def web_noti_tmpl(self):
-        suffix = self.web_noti_tmpl_suffix
-        template = '%s/includes/%s%s' % (self._meta.app_label, self.model_tmpl_part, getattr(self, suffix, ''))
+        template = '%s/includes/%s%s' % (self._meta.app_label, self.model_tmpl_part, self.web_noti_tmpl_suffix)
         return template
 
     @classmethod
@@ -98,7 +104,7 @@ class NotificationMixin(object):
 
         """
         suffix = '%s_suffix' % attr_name
-        template = '%s/templates/%s/includes/%s%s' % (cls._meta.app_label, cls._meta.app_label, cls.model_tmpl_part, getattr(cls, suffix, ''))
+        template = '%s/templates/%s/emails/%s%s' % (cls._meta.app_label, cls._meta.app_label, cls.model_tmpl_part, getattr(cls, suffix, ''))
         return template
 
     def _get_email_field(self, attr_name, method_name):

@@ -2,6 +2,7 @@
 
 from django.views.generic import View
 from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
@@ -50,3 +51,17 @@ class ClearNotificationView(View, SingleObjectMixin):
         except AttributeError:
             pass
         return redirect(self.url)
+
+
+class DeleteNotificationView(DeleteView):
+    model = Notification
+    success_url = reverse_lazy('notifications_list')
+
+    # def get_success_url(self):
+    #     return self.request.user.sec_user.get_absolute_url()
+
+    # def delete(self, request, *args, **kwargs):
+    #     # SuccessMessageMixin does not apply in DeleteView:
+    #     # https://code.djangoproject.com/ticket/21936
+    #     messages.success(self.request, self.success_message)
+    #     return super(WorkExperienceDelete, self).delete(request, *args, **kwargs)

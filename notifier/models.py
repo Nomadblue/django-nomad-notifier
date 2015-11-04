@@ -25,7 +25,7 @@ class Notification(models.Model):
     creation_dt = models.DateTimeField(auto_now_add=True)
     displayed = models.BooleanField(default=False)
     email_sent = models.BooleanField(default=False)
-    delivery_response = models.TextField(blank=True)
+    delivery_response = models.TextField(blank=True, help_text='SMTP error codes and messages')
 
     objects = InheritanceManager()
 
@@ -189,6 +189,15 @@ class NotificationMixin(object):
             html_body = self.get_email_html_body()
             if html_body:
                 msg.attach_alternative(html_body, 'text/html')
-            msg.send()
-            self.email_sent = True
-            self.save()
+            try:
+                msg.send()
+            except Exception as exc:
+                # Store error msg
+                self.delivery_response = "SMTP code: %s\nSMTP error: %s\nMessage: %s" % (exc.smtp_code, exc.smtp_error, exc.message)
+                self.save()
+                # Not failing silently is default behaviour
+                if not hasattr(settings, 'NOTI_FAIL_SILENTLY') or not settings.NOTI_FAIL_SILENTLY:
+                    raise
+            else:
+                self.email_sent = True
+                self.save()

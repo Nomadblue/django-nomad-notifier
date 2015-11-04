@@ -2,6 +2,12 @@
 CHANGELOG
 =========
 
+Version 1.4.1
+=============
+
+* Store email exceptions in Notification model
+* New NOTI_FAIL_SILENTLY setting to fail silently at email sending.
+
 Version 1.4.0
 =============
 

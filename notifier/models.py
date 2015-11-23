@@ -193,10 +193,13 @@ class NotificationMixin(object):
                 msg.send()
             except Exception as exc:
                 # Store error msg
-                self.delivery_response = "SMTP code: %s\nSMTP error: %s\nMessage: %s" % (exc.smtp_code, exc.smtp_error, exc.message)
+                smtp_code = getattr(exc, 'smtp_code', '')
+                smtp_error = getattr(exc, 'smtp_error', '')
+                error_msg = getattr(exc, 'message', '')
+                self.delivery_response = "Exception: %s\nSMTP code: %s\nSMTP error: %s\nMessage: %s" % (repr(exc), smtp_code, smtp_error, error_msg)
                 self.save()
                 # Not failing silently is default behaviour
-                if not hasattr(settings, 'NOTI_FAIL_SILENTLY') or not settings.NOTI_FAIL_SILENTLY:
+                if not getattr(settings, 'NOTI_FAIL_SILENTLY', False):
                     raise
             else:
                 self.email_sent = True

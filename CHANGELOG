@@ -2,6 +2,13 @@
 CHANGELOG
 =========
 
+Version 1.4.1
+=============
+
+* Add email attachment support to NotificationMixin. Its
+  get_attachement_paths method must be overriden to return the
+  list of filepaths to the files to attach to use the new functionality.
+
 Version 1.4.0
 =============
 

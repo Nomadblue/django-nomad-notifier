@@ -91,6 +91,10 @@ class NotificationMixin(object):
         """If implemented, is used in `_render_tmpl` to translate tmpl"""
         return None
 
+    def get_attachment_paths(self):
+        """If implemented, the list of files this returns will be attached to the outgoing email"""
+        return list()
+
     @classmethod
     def get_auto_email_field_tmpl(cls, attr_name):
         """
@@ -189,6 +193,9 @@ class NotificationMixin(object):
             html_body = self.get_email_html_body()
             if html_body:
                 msg.attach_alternative(html_body, 'text/html')
+            attachment_paths = self.get_attachment_paths()
+            for path in attachment_paths:
+                msg.attach_file(path)
             try:
                 msg.send()
             except Exception as exc:

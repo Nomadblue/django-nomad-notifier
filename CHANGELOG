@@ -2,7 +2,14 @@
 CHANGELOG
 =========
 
-Version 1.4.1
+Version 1.4.2
+=============
+
+* Add email attachment support to NotificationMixin. Its get_attachement_paths
+  method must be overriden to return the list of filepaths to the files to
+  attach to use the new functionality.
+
+Version 1.4.2
 =============
 
 * Store email exceptions in Notification model
@@ -66,4 +73,3 @@ Version 0.1
 ===========
 
 * First release of package
-

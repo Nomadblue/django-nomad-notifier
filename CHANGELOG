@@ -2,6 +2,12 @@
 CHANGELOG
 =========
 
+Version 1.4.3
+=============
+
+* Use `default_storage.open` method for attachments, because on production
+  environments usually media is stored on storages such as AWS S3.
+
 Version 1.4.2
 =============
 

@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+Version 1.4.4
+=============
+
+* Add cc recipients support to NotificationMixin.
+
 Version 1.4.3
 =============
 

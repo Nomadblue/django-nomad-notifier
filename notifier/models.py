@@ -95,6 +95,10 @@ class NotificationMixin(object):
         """If implemented, the list of files this returns will be attached to the outgoing email"""
         return list()
 
+    def get_cc_recipients_list(self):
+        """If implemented, the list of receipients will be cc'ed in the notification"""
+        return list()
+
     @classmethod
     def get_auto_email_field_tmpl(cls, attr_name):
         """
@@ -187,9 +191,10 @@ class NotificationMixin(object):
             from_email = self.get_from_email()
             headers = self.get_email_headers()
             recipients = self.get_recipients_list()
+            cc_recipients = self.get_cc_recipients_list()
             subject = self.get_email_subject().strip()
             plaintext_body = self.get_email_plaintext_body()
-            msg = EmailMultiAlternatives(subject, plaintext_body, from_email, recipients, headers=headers)
+            msg = EmailMultiAlternatives(subject, plaintext_body, from_email, recipients, headers=headers, cc=cc_recipients)
             html_body = self.get_email_html_body()
             if html_body:
                 msg.attach_alternative(html_body, 'text/html')

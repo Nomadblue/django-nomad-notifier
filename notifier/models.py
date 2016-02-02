@@ -184,18 +184,33 @@ class NotificationMixin(object):
 
     def send_notification_email(self):
         if getattr(settings, 'SEND_EMAIL_NOTIFICATIONS', False):
+
+            # From email and headers
             from_email = self.get_from_email()
             headers = self.get_email_headers()
-            recipients = self.get_recipients_list()
+
+            # Recipients
+            recipients = getattr(settings, 'TEST_NOTIFICATIONS_RECIPIENTS', False)
+            if recipients:
+                recipients = [recipient.strip() for recipient in recipients]
+            else:
+                recipients = self.get_recipients_list()
+
+            # Prepare subject and body
             subject = self.get_email_subject().strip()
             plaintext_body = self.get_email_plaintext_body()
-            msg = EmailMultiAlternatives(subject, plaintext_body, from_email, recipients, headers=headers)
             html_body = self.get_email_html_body()
+
+            # Prepare message
+            msg = EmailMultiAlternatives(subject, plaintext_body, from_email, recipients, headers=headers)
             if html_body:
                 msg.attach_alternative(html_body, 'text/html')
+
+            # Add attachments
             attachment_files = self.get_attachment_files()
             for att in attachment_files:
                 msg.attach(att.name, att.read())
+
             try:
                 msg.send()
             except Exception as exc:

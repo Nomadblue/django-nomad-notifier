@@ -2,6 +2,13 @@
 CHANGELOG
 =========
 
+Version 1.4.4
+=============
+
+* Add `TEST_NOTIFICATIONS_RECIPIENTS` setting for testing purposes, so all
+  emails will go to the specified recipients instead of the ones defined in the
+  notification.
+
 Version 1.4.3
 =============
 

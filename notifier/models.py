@@ -196,7 +196,7 @@ class NotificationMixin(object):
             # Recipients
             recipients = getattr(settings, 'TEST_NOTIFICATIONS_RECIPIENTS', False)
             if recipients:
-                recipients = [recipient.strip() for recipient in recipients]
+                recipients = [recipient.strip() for recipient in recipients.split(',')]
             else:
                 recipients = self.get_recipients_list()
 

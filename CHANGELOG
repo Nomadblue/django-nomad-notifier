@@ -2,6 +2,11 @@
 CHANGELOG
 =========
 
+Version 1.4.6
+=============
+
+* Do not send CC if TEST_NOTIFICATIONS_RECIPIENTS
+
 Version 1.4.5
 =============
 

@@ -194,14 +194,19 @@ class NotificationMixin(object):
             headers = self.get_email_headers()
 
             # Recipients
-            recipients = getattr(settings, 'TEST_NOTIFICATIONS_RECIPIENTS', False)
-            if recipients:
-                recipients = [recipient.strip() for recipient in recipients.split(',')]
+            test_recipients = getattr(settings, 'TEST_NOTIFICATIONS_RECIPIENTS', False)
+            if test_recipients:
+                # Use testing recipients
+                recipients = [recipient.strip() for recipient in test_recipients .split(',')]
             else:
                 recipients = self.get_recipients_list()
 
             # CC recipients
-            cc_recipients = self.get_cc_recipients_list()
+            if test_recipients:
+                # If testing, send no CC
+                cc_recipients = []
+            else:
+                cc_recipients = self.get_cc_recipients_list()
 
             # Prepare subject and body
             subject = self.get_email_subject().strip()

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
-from django.template.base import TemplateDoesNotExist
+from django.template import TemplateDoesNotExist
 from django.utils import translation
 
 from model_utils.managers import InheritanceManager

@@ -2,6 +2,13 @@
 CHANGELOG
 =========
 
+Version 1.4.7
+=============
+
+* Add Django 1.9 compatibility, backwards compatible with 1.8.
+  Skipping a build version number due to wrong module version listed
+  on PyPi.
+
 Version 1.4.5
 =============
 

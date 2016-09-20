@@ -5,6 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 from django.template import TemplateDoesNotExist
 from django.utils import translation
+from six.moves.html_parser import HTMLParser
 
 from model_utils.managers import InheritanceManager
 
@@ -138,7 +139,11 @@ class NotificationMixin(object):
         Your class must define an `email_subject_tmpl` attribute
         containing a template path to a file that has your email subject.
         """
-        return self._get_email_field('email_subject_tmpl', 'get_email_subject')
+        # Convert the html back to plaintext after rendering it using template
+        # to get rid of html ampersand character codes
+        parser = HTMLParser()
+        html_email = self._get_email_field('email_subject_tmpl', 'get_email_subject')
+        return parser.unescape(html_email)
 
     def get_email_plaintext_body(self):
         """
@@ -148,7 +153,11 @@ class NotificationMixin(object):
         containing a template path to a file that has the plaintext version
         of your email body.
         """
-        return self._get_email_field('email_plaintext_body_tmpl', 'get_email_plaintext_body')
+        # Convert the html back to plaintext after rendering it using template
+        # to get rid of html ampersand character codes
+        parser = HTMLParser()
+        html_email = self._get_email_field('email_plaintext_body_tmpl', 'get_email_plaintext_body')
+        return parser.unescape(html_email)
 
     def get_email_html_body(self):
         """

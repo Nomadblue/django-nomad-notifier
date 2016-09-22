@@ -2,6 +2,12 @@
 CHANGELOG
 =========
 
+Version 1.4.8
+=============
+
+* Fix rendering of plaintext email subject and body by decoding
+  ampersand expressions.
+
 Version 1.4.7
 =============
 

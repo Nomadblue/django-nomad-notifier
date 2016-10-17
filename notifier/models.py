@@ -41,20 +41,29 @@ class Notification(models.Model):
 
     @property
     def web_noti_tmpl(self):
-        template = '%s/includes/%s%s' % (self._meta.app_label, self.model_tmpl_part, self.web_noti_tmpl_suffix)
+        template = '%s/includes/%s%s' % (self._meta.app_label, self.get_model_tmpl_part(), self.web_noti_tmpl_suffix)
         return template
 
     @classmethod
-    def get_auto_web_noti_tmpl(cls):
+    def get_auto_web_noti_tmpl(cls, model_tmpl_part=None):
         """
         Use this method to get the tmpl you need to create in order to use
-        the auto-generated tmpl path. Examples:
+        the auto-generated tmpl path. Example:
 
         >>> model = YourNotiClass
         >>> model.get_auto_web_noti_tmpl()
 
+        Another example for a notification that implements
+        `get_model_tmpl_part` (see the method docstring for more information):
+
+        >>> model = YourNotiClass
+        >>> model.get_auto_web_noti_tmpl()
+        >>> model.get_auto_web_noti_tmpl(model_tmpl_part='welcome_basic_user')
+        >>> model.get_auto_web_noti_tmpl(model_tmpl_part='welcome_premium_user')
         """
-        template = '%s/templates/%s/includes/%s%s' % (cls._meta.app_label, cls._meta.app_label, cls.model_tmpl_part, cls.web_noti_tmpl_suffix)
+        if not model_tmpl_part:
+            model_tmpl_part = cls.model_tmpl_part
+        template = '%s/templates/%s/includes/%s%s' % (cls._meta.app_label, cls._meta.app_label, model_tmpl_part, cls.web_noti_tmpl_suffix)
         return template
 
 
@@ -100,24 +109,44 @@ class NotificationMixin(object):
         return list()
 
     @classmethod
-    def get_auto_email_field_tmpl(cls, attr_name):
+    def get_auto_email_field_tmpl(cls, attr_name, model_tmpl_part=None):
         """
         Use this method to get the tmpl you need to create in order to use
-        the auto-generated tmpl paths. Examples:
+        the auto-generated tmpl paths. Example:
 
         >>> model = YourNotiClass
         >>> model.get_auto_email_field_tmpl('email_subject_tmpl')
         >>> model.get_auto_email_field_tmpl('email_plaintext_body_tmpl')
         >>> model.get_auto_email_field_tmpl('email_html_body_tmpl')
 
+        Another example for a notification that implements
+        `get_model_tmpl_part` (see the method docstring for more information):
+
+        >>> model = YourNotiClass
+        >>> model.get_auto_email_field_tmpl('email_subject_tmpl', model_tmpl_part='welcome_basic_user')
+        >>> model.get_auto_email_field_tmpl('email_subject_tmpl', model_tmpl_part='welcome_premium_user')
         """
         suffix = '%s_suffix' % attr_name
-        template = '%s/templates/%s/emails/%s%s' % (cls._meta.app_label, cls._meta.app_label, cls.model_tmpl_part, getattr(cls, suffix, ''))
+        if not model_tmpl_part:
+            model_tmpl_part = cls.model_tmpl_part
+        template = '%s/templates/%s/emails/%s%s' % (cls._meta.app_label, cls._meta.app_label, model_tmpl_part, getattr(cls, suffix, ''))
         return template
 
+    def get_model_tmpl_part(self):
+        """
+        Override in the subclass to enable using the right tmpl based on
+        whatever business logic you need to apply. For instance, if we want to
+        use different templates for a welcome message depending on the type of
+        user (e.g. a basic user receives a notification text, a premium user
+        another one) we could implement the code to return the proper
+        `model_tmpl_part`.
+        """
+        return self.model_tmpl_part
+
     def _get_email_field(self, attr_name, method_name):
+        model_tmpl_part = self.get_model_tmpl_part()
         suffix = '%s_suffix' % attr_name
-        template = '%s/emails/%s%s' % (self._meta.app_label, self.model_tmpl_part, getattr(self, suffix, ''))
+        template = '%s/emails/%s%s' % (self._meta.app_label, model_tmpl_part, getattr(self, suffix, ''))
 
         # Try auto-generation of tmpl path
         try:
